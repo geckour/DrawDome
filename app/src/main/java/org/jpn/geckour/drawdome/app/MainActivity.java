@@ -2,6 +2,7 @@ package org.jpn.geckour.drawdome.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,6 +30,8 @@ public class MainActivity extends ActionBarActivity {
 
         MyView view = new MyView(this);
         setContentView(view);
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 
@@ -60,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
         int black = Color.rgb(0, 0, 0), white = Color.rgb(255, 255, 255);
         int bgColor = (Math.random() <= 0.5)?black:white;
 
-        int l = (int) (4 + Math.random()*50);
+        int l = (int) (4 + Math.random()*77);
         int order = 1;
         double speed = 2 + Math.random()*4;
         double radius;
@@ -169,7 +172,7 @@ public class MainActivity extends ActionBarActivity {
                             if ( judgef <= framec ) {
                                 sumpX2 = pX[p2];
                                 sumpY2 = pY[p2];
-                                if ( dist_i >= ((l/2 - 1)/2)*order + l && forward) {
+                                if (j >= step && step >= l/2 - 1 && forward) {
                                     state = false;
                                 }
                             }
@@ -212,8 +215,8 @@ public class MainActivity extends ActionBarActivity {
                 double reachfX_d = Math.sqrt((dX/delX)*(dX/delX));
                 double reachfY_d = Math.sqrt((dY/delY)*(dY/delY));
 
-                reachfX = interval*(int) (step/2) + (int) (reachfX_d);
-                reachfY = interval*(int) (step/2) + (int) (reachfY_d);
+                reachfX = interval*(step/2) + (int) (reachfX_d);
+                reachfY = interval*(step/2) + (int) (reachfY_d);
             }
         }
 

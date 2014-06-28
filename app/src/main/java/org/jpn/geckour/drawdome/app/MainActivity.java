@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -61,23 +61,23 @@ public class MainActivity extends ActionBarActivity {
         int r = 0, g = 0, b = 0;
         int randomColor;
         int black = Color.rgb(0, 0, 0), white = Color.rgb(255, 255, 255);
-        int bgColor = (Math.random() <= 0.5)?black:white;
+        int bgColor = (Math.random() <= 0.5) ? black : white;
 
-        int l = (int) (4 + Math.random()*77);
+        int l = (int) (4 + Math.random() * 77);
         int order = 1;
-        double speed = 2 + Math.random()*4;
+        double speed = 2 + Math.random() * 4;
         double radius;
         Display display = getWindowManager().getDefaultDisplay();
         Point point = new Point();
         double offsetX, offsetY;
-        double cr = (Math.PI*2)/l;
+        double cr = (Math.PI * 2) / l;
         double[] pX, pY;
         CalcDist[] dists;
         int step = 0;
-        int interval = ((int) (45/speed) >= 10)?(int) (45/speed):10;
-        boolean cont[] = new boolean[l/2 + 3];
-        int reachfX[] = new int[l/2 + 3];
-        int reachfY[] = new int[l/2 + 3];
+        int interval = ((int) (45 / speed) >= 10) ? (int) (45 / speed) : 10;
+        boolean cont[] = new boolean[l / 2 + 3];
+        int reachfX[] = new int[l / 2 + 3];
+        int reachfY[] = new int[l / 2 + 3];
 
         Paint p = new Paint();
 
@@ -90,38 +90,38 @@ public class MainActivity extends ActionBarActivity {
             super(context);
 
             display.getSize(point);
-            offsetX = point.x/2;
-            offsetY = point.y/2 - 50;
+            offsetX = point.x / 2;
+            offsetY = point.y / 2 - 50;
             radius = offsetX < offsetY ? offsetX * 0.9 : offsetY * 0.9;
 
             p.setColor(randomColor);
 
             //randomColorと背景色(黒/白)のコントラストが低い場合に再計算
             int limitL = 80, limitU = 170;
-            while ( (r < limitL && g < limitL) || (g < limitL && b < limitL) || (b < limitL && r < limitL) || (limitU < r && limitU < g) || (limitU < g && limitU < b) || (limitU < b && limitU < r) ) {
-                r = (int) (Math.random()*256);
-                g = (int) (Math.random()*256);
-                b = (int) (Math.random()*256);
+            while ((r < limitL && g < limitL) || (g < limitL && b < limitL) || (b < limitL && r < limitL) || (limitU < r && limitU < g) || (limitU < g && limitU < b) || (limitU < b && limitU < r)) {
+                r = (int) (Math.random() * 256);
+                g = (int) (Math.random() * 256);
+                b = (int) (Math.random() * 256);
             }
             randomColor = Color.argb(90, r, g, b);
 
             pX = new double[l];
             pY = new double[l];
-            for ( int i = 0; i < l; i++ ) {
-                pX[i] = Math.cos(cr*i)*radius + offsetX;
-                pY[i] = Math.sin(cr*i)*radius + offsetY;
+            for (int i = 0; i < l; i++) {
+                pX[i] = Math.cos(cr * i) * radius + offsetX;
+                pY[i] = Math.sin(cr * i) * radius + offsetY;
                 BigDecimal bdX = new BigDecimal(pX[i]), bdY = new BigDecimal(pY[i]);
                 Log.v("echo", "pX[" + String.format("%03d", i) + "]:" + String.format("%5f", bdX.setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue()) + "\tpY[" + String.format("%03d", i) + "]:" + String.format("%5f", bdY.setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue()));
             }
-            for ( int i = 0; i < l/2; i++ ) {
+            for (int i = 0; i < l / 2; i++) {
                 cont[i] = true;
             }
-            for ( int i = 0; i < l/2 + 3; i++ ) {
+            for (int i = 0; i < l / 2 + 3; i++) {
                 reachfX[i] = 0;
                 reachfY[i] = 0;
             }
-            for ( int i = 0; i < String.valueOf(l).length(); i++ ) order *= 10;
-            dists = new CalcDist[(l/4 + 1)*order];
+            for (int i = 0; i < String.valueOf(l).length(); i++) order *= 10;
+            dists = new CalcDist[(l / 4 + 1) * order];
 
             Timer timer = new Timer(false);
             timer.schedule(new TimerTask() {
@@ -144,44 +144,45 @@ public class MainActivity extends ActionBarActivity {
         public void onDraw(Canvas c) {
             c.drawColor(bgColor);
 
-            for ( int i = 0; i < l; i++ ) {
-                for ( int j = 2; j <= step; j += 2 ) {
+            for (int i = 0; i < l; i++) {
+                for (int j = 2; j <= step; j += 2) {
                     int p1, p2;
                     //点1と点2を定義
-                    if ( i%l < l - j ) {
-                        p1 = i%l;
-                        p2 = i%l + j;
+                    if (i % l < l - j) {
+                        p1 = i % l;
+                        p2 = i % l + j;
                     } else {
-                        p1 = i%l;
-                        p2 = i%l + j - (l);
+                        p1 = i % l;
+                        p2 = i % l + j - (l);
                     }
                     double sumpX2 = pX[p1], sumpY2 = pY[p1];
                     //線の長さを定義、引き終わっていれば長さを固定
-                    if ( step != 0 ) {
-                        int dist_i = (j/2)*order + i;
+                    if (step != 0) {
+                        int dist_i = (j / 2) * order + i;
 
-                        if ( dists[dist_i] == null ) {
+                        if (dists[dist_i] == null) {
                             CalcDist calcDist = new CalcDist(pX[p1], pY[p1], pX[p2], pY[p2], step);
                             dists[dist_i] = calcDist;
                         } else {
-                            //フレーム毎に線を伸ばす
-                            sumpX2 = pX[p1] + dists[dist_i].delX*(framec - (j/2)*interval);
-                            sumpY2 = pY[p1] + dists[dist_i].delY*(framec - (j/2)*interval);
                             //長さを固定
-                            int judgef = (dists[dist_i].reachfX >= dists[dist_i].reachfY)?dists[dist_i].reachfX:dists[dist_i].reachfY;
-                            if ( judgef <= framec ) {
+                            int judgef = (dists[dist_i].reachfX >= dists[dist_i].reachfY) ? dists[dist_i].reachfX : dists[dist_i].reachfY;
+                            if (judgef <= framec) {
                                 sumpX2 = pX[p2];
                                 sumpY2 = pY[p2];
-                                if (j >= step && step >= l/2 - 1 && forward) {
+                                if (j >= step && step >= l / 2 - 1 && forward) {
                                     state = false;
                                 }
+                            } else {
+                                //フレーム毎に線を伸ばす
+                                sumpX2 = pX[p1] + dists[dist_i].delX * (framec - (j / 2) * interval);
+                                sumpY2 = pY[p1] + dists[dist_i].delY * (framec - (j / 2) * interval);
                             }
                         }
-                        int longest_i = ((l/2 - 1)/2)*order;
+
                         //動作反転時に始点で止める処理
-                        if ( dists[longest_i] != null ) {
-                            if ( !forward && dists[longest_i].reachfX - dists[dist_i].reachfX >= framec ) sumpX2 = pX[p1];
-                            if ( !forward && dists[longest_i].reachfY - dists[dist_i].reachfY >= framec ) sumpY2 = pY[p1];
+                        if (framec < (j/2) * interval) {
+                            sumpX2 = pX[p1];
+                            sumpY2 = pY[p1];
                         }
                     }
 
@@ -190,8 +191,8 @@ public class MainActivity extends ActionBarActivity {
                     c.drawLine((float) pX[p1], (float) pY[p1], (float) sumpX2, (float) sumpY2, p);
                 }
             }
-            if ( framec <= 0 && !forward) state = false;
-            if ( framec > 0 && framec%interval == 0 && step < l/2 - 1 ) step += 2;
+            if (framec <= 0 && !forward) state = false;
+            if (framec > 0 && framec % interval == 0 && step < l / 2 - 1) step += 2;
 
             p.setTextSize(24);
             String frameStr = "frame:" + String.format("%6d", framec);
@@ -205,24 +206,25 @@ public class MainActivity extends ActionBarActivity {
             int reachfX = 0;
             int reachfY = 0;
 
-            public CalcDist( double pX1, double pY1, double pX2, double pY2, int step ) {
+            public CalcDist(double pX1, double pY1, double pX2, double pY2, int step) {
                 dX = pX2 - pX1;
                 dY = pY2 - pY1;
-                dist = Math.sqrt(dX*dX + dY*dY);
-                delX = (dX/dist)*speed;
-                delY = (dY/dist)*speed;
+                dist = Math.sqrt(dX * dX + dY * dY);
+                delX = (dX / dist) * speed;
+                delY = (dY / dist) * speed;
 
-                double reachfX_d = Math.sqrt((dX/delX)*(dX/delX));
-                double reachfY_d = Math.sqrt((dY/delY)*(dY/delY));
+                double reachfX_d = Math.sqrt((dX / delX) * (dX / delX));
+                double reachfY_d = Math.sqrt((dY / delY) * (dY / delY));
 
-                reachfX = interval*(step/2) + (int) (reachfX_d);
-                reachfY = interval*(step/2) + (int) (reachfY_d);
+                reachfX = interval * (step / 2) + (int) (reachfX_d);
+                reachfY = interval * (step / 2) + (int) (reachfY_d);
             }
         }
 
+        float downX = 0, downY = 0;
+
         public boolean onTouchEvent(MotionEvent event) {
             float upX = 0, upY = 0;
-            float downX = 0, downY = 0;
             float tsh = 80;
             switch (event.getAction()) {
                 //タッチ
@@ -239,8 +241,16 @@ public class MainActivity extends ActionBarActivity {
                 case MotionEvent.ACTION_UP:
                     upX = event.getX();
                     upY = event.getY();
-                    MainActivity.this.finish();
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    Log.v("echo", "dX:" + downX + ", dY:" + downY + ", uX:" + upX + ", uY:" + upY);
+                    if (upX + tsh < downX || downX + tsh < upX || upY + tsh < downY || downY + tsh < upY) {
+                        forward = !forward;
+                        if (!state) {
+                            state = true;
+                        }
+                    } else {
+                        MainActivity.this.finish();
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    }
 
                     break;
                 //不意のリリース
@@ -256,36 +266,3 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 }
-/*
-public class DomeLogo {
-    static int sizeDef = 500;
-    static String[] opt_str = {"speed", "apex", "x", "y", "size"};
-    static double[] opt_double = new double[opt_str.length];
-    static boolean slow = false, black = false, white = false;
-
-    //main
-    public static void main( String[] args ) {
-        opt_double[0] = 1.5;
-        opt_double[1] = 0.0;
-        opt_double[2] = sizeDef;
-        opt_double[3] = sizeDef;
-        opt_double[4] = sizeDef;
-
-        //arguments
-        for ( int i = 0; i < args.length; i++ ) {
-            for (int j = 0; j < opt_str.length; j++) {
-                if (args[i].equals(opt_str[j])) {
-                    try {
-                        opt_double[j] = Double.parseDouble(args[i + 1]);
-                    } catch (Exception e) {
-                    }
-                } else {
-                }
-            }
-            if (args[i].equals("slow")) slow = true;
-            if (args[i].equals("black")) black = true;
-            if (args[i].equals("white")) white = true;
-        }
-    }
-}
-*/

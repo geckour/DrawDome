@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="min_vertices"
+        android:title="最小頂点数"
+        android:summary="@string/min_vertices"
+        android:dialogTitle="最低値:4"
+        android:order="0" />
+    <EditTextPreference
+        android:key="max_vertices"
+        android:title="最大頂点数"
+        android:summary="@string/max_vertices"
+        android:dialogTitle="最大値:80"
+        android:order="1" />
+</PreferenceScreen>

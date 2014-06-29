@@ -1,13 +1,16 @@
 package org.jpn.geckour.drawdome.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,12 +24,32 @@ import java.math.BigDecimal;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class MainActivity extends ActionBarActivity {
+    SharedPreferences sp;
+    int min = 4;
+    int max = 80;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sp.getString("min_vertices", "null").equals("null") || sp.getString("min_vertices", "null") == null) {
+            sp.edit().putString("min_vertices", "4").apply();
+        }
+        try {
+            min = Integer.parseInt(sp.getString("min_vertices", "4"));
+        } catch (Exception e) {
+            Log.v("error", "Can't translate minimum-vertices to int.");
+        }
+        if (sp.getString("max_vertices", "null").equals("null") || sp.getString("max_vertices", "null") == null) {
+            sp.edit().putString("max_vertices", "80").apply();
+        }
+        try {
+            max = Integer.parseInt(sp.getString("max_vertices", "80"));
+        } catch (Exception e) {
+            Log.v("error", "Can't translate maximum-vertices to int.");
+        }
 
         MyView view = new MyView(this);
         setContentView(view);
@@ -50,9 +73,25 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            startActivityForResult(new Intent(this, Pref.class), 0);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //他classへのintentの戻り値を受け付ける
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        //Pref.javaからの戻り値の場合
+        if (requestCode == 0){
+            if (resultCode == Activity.RESULT_OK) {
+                if (Integer.parseInt(sp.getString("min_vertices", "4")) < 4) {
+                    sp.edit().putString("min_vertices", "4");
+                }
+                if (Integer.parseInt(sp.getString("max_vertices", "80")) > 100) {
+                    sp.edit().putString("max_vertices", "100");
+                }
+            }
+        }
     }
 
     class MyView extends View {
@@ -63,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
         int black = Color.rgb(0, 0, 0), white = Color.rgb(255, 255, 255);
         int bgColor = (Math.random() <= 0.5) ? black : white;
 
-        int l = (int) (4 + Math.random() * 77);
+        int l = (int) (min + Math.random() * (max - min + 1));
         int order = 1;
         double speed = 2 + Math.random() * 4;
         double radius;
@@ -239,9 +278,9 @@ public class MainActivity extends ActionBarActivity {
                     break;
                 //リリース
                 case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
                     upX = event.getX();
                     upY = event.getY();
-                    Log.v("echo", "dX:" + downX + ", dY:" + downY + ", uX:" + upX + ", uY:" + upY);
                     if (upX + tsh < downX || downX + tsh < upX || upY + tsh < downY || downY + tsh < upY) {
                         forward = !forward;
                         if (!state) {
@@ -251,14 +290,6 @@ public class MainActivity extends ActionBarActivity {
                         MainActivity.this.finish();
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
                     }
-
-                    break;
-                //不意のリリース
-                case MotionEvent.ACTION_CANCEL:
-                    upX = event.getX();
-                    upY = event.getY();
-                    MainActivity.this.finish();
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
 
                     break;
             }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.3.0_c1c48b9c9db342cd2cd34333ab4776366e1109ea/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.3.0_b4205ca54e4fec4fc94e89e9bb2c92048bd44b6d/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="afdfdd9b75637c844a8cd22f056327d2766f575b">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_84e4695c806b11c38fbc65e844ade1a97dd3fdec/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.3.0/support-annotations-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.3.0_95f9ac6396d1a28e92a7d4d194d7f6687c289449/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.3.0_2a462cabb736948b7e05640f3346c66487b2a521/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.3.0_e67a0469d29e92979d0d4e6d9aac30e5df6383c5/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="fc0b4a45285c406c49d82c075d4eddb9ac5a7a49">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8cc7f8ad9713b640c9c0bfa7031cb47963618283/classes.dex" />
+    </item>
+    <item
+        jar="/Users/rui/develop/git/DrawDome/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="/Users/rui/develop/git/DrawDome/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.3.0_f6d64550b2abb1e23afa9d125bb63c4f4bb2c259/classes.dex" />
+    </item>
+
+</items>

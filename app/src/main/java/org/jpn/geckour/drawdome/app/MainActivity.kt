@@ -20,9 +20,11 @@ import android.view.View
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        val MIN_DEFAULT = 4
+        val MAX_DEFAULT = 80
+    }
     private var sp: SharedPreferences? = null
-    private val MIN_DEFAULT = 4
-    private val MAX_DEFAULT = 80
     private var min = MIN_DEFAULT
     private var max = MAX_DEFAULT
 
@@ -30,15 +32,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         sp = PreferenceManager.getDefaultSharedPreferences(this)
-        if (sp?.getInt("min_vertices", -1) ?: 0 < 0) {
-            sp?.edit()?.putInt("min_vertices", MIN_DEFAULT)?.apply()
+        if (sp?.getString("min_vertices", "-1")?.toInt() ?: 0 < 0) {
+            sp?.edit()?.putString("min_vertices", MIN_DEFAULT.toString())?.apply()
         }
-        min = sp?.getInt("min_vertices", MIN_DEFAULT) ?: MIN_DEFAULT
+        min = sp?.getString("min_vertices", MIN_DEFAULT.toString())?.toInt() ?: MIN_DEFAULT
 
-        if (sp?.getInt("max_vertices", -1) ?: 0 < 0) {
-            sp?.edit()?.putInt("max_vertices", MAX_DEFAULT)?.apply()
+        if (sp?.getString("max_vertices", "-1")?.toInt() ?: 0 < 0) {
+            sp?.edit()?.putString("max_vertices", MAX_DEFAULT.toString())?.apply()
         }
-        max = sp?.getInt("max_vertices", MAX_DEFAULT) ?: MIN_DEFAULT
+        max = sp?.getString("max_vertices", MAX_DEFAULT.toString())?.toInt() ?: MAX_DEFAULT
 
         setContentView(MyView(this))
     }
@@ -68,11 +70,11 @@ class MainActivity : AppCompatActivity() {
         //Pref.javaからの戻り値の場合
         if (requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {
-                if (Integer.parseInt(sp?.getString("min_vertices", "4")) < 4) {
-                    sp?.edit()?.putInt("min_vertices", 4)?.apply()
+                if (sp?.getString("min_vertices", MIN_DEFAULT.toString())?.toInt() ?: MIN_DEFAULT < 4) {
+                    sp?.edit()?.putString("min_vertices", "4")?.apply()
                 }
-                if (Integer.parseInt(sp?.getString("max_vertices", "80")) > 100) {
-                    sp?.edit()?.putInt("max_vertices", 100)?.apply()
+                if (sp?.getString("max_vertices", MAX_DEFAULT.toString())?.toInt() ?: MAX_DEFAULT > 100) {
+                    sp?.edit()?.putString("max_vertices", "100")?.apply()
                 }
             }
         }
@@ -99,9 +101,6 @@ class MainActivity : AppCompatActivity() {
         private var calcInfos: Array<Array<CalcInfo>> = Array(l, {i -> Array(l / 4, {i -> CalcInfo()})})
         private var step = 0
         private var interval = if (45 / speed >= 10) (45 / speed).toInt() else 10
-        private var isContinue = BooleanArray(l / 2 + 3)
-        private var frameTillReachX = IntArray(l / 2 + 3)
-        private var frameTillReachY = IntArray(l / 2 + 3)
 
         private var p = Paint()
 
@@ -120,13 +119,6 @@ class MainActivity : AppCompatActivity() {
                 pX[i] = Math.cos(cr * i).toFloat() * radius + offsetX
                 pY[i] = Math.sin(cr * i).toFloat() * radius + offsetY
                 Log.d("echo","pX[${String.format("%03d", i)}]:${String.format("%5f", pX[i])}\tpY[${String.format("%03d", i)}]:${String.format("%5f", pX[i])}")
-            }
-            for (i in 0..l / 2 - 1) {
-                isContinue[i] = true
-            }
-            for (i in 0..l / 2 + 3 - 1) {
-                frameTillReachX[i] = 0
-                frameTillReachY[i] = 0
             }
 
             for (i in 0..l - 1) {
@@ -190,12 +182,21 @@ class MainActivity : AppCompatActivity() {
                     //線の長さを定義、引き終わっていれば長さを固定
                     var sumpX2 = pX[p2]
                     var sumpY2 = pY[p2]
-                    if (framec > Math.max(calcInfo.frameTillReachX, calcInfo.frameTillReachY)) {
-                        if (framec > frameEnd) state = false
-                    } else if (!(!forward && framec < j / 2 * interval)) { //動作反転時は始点で止める
+
+                    if (!(!forward && framec < j / 2 * interval)) { //動作反転時は始点で止める
                         //フレーム毎に線を伸ばす
                         sumpX2 = pX[p1] + (calcInfo.delX) * (framec - (j / 2) * interval)
                         sumpY2 = pY[p1] + (calcInfo.delY) * (framec - (j / 2) * interval)
+                    }
+
+                    if (framec > Math.max(calcInfo.frameTillReachX, calcInfo.frameTillReachY)) {
+                        sumpX2 = pX[p2]
+                        sumpY2 = pY[p2]
+                        if (framec > frameEnd) state = false
+                    }
+                    if (framec < interval * (j / 2 + 1)) {
+                        sumpX2 = pX[p1]
+                        sumpY2 = pY[p1]
                     }
 
                     //線を描画
@@ -203,7 +204,7 @@ class MainActivity : AppCompatActivity() {
                     c.drawLine(pX[p1], pY[p1], sumpX2, sumpY2, p)
                 }
             }
-            if (framec == 0 && !forward) state = false
+            if (!forward && framec == 0) state = false
             if (framec > 0 && framec % interval == 0 && step < l / 2 - 1) step += 2
 
             p.textSize = 24f
@@ -228,7 +229,6 @@ class MainActivity : AppCompatActivity() {
                 val dist = Math.sqrt(Math.pow(dX.toDouble(), 2.0) + Math.pow(dY.toDouble(), 2.0)).toFloat()
                 delX = (dX / dist) * speed
                 delY = (dY / dist) * speed
-                Log.d("echo", "delX: $delX, delY: $delY")
                 val frameRXd = Math.abs(dX / delX).toInt()
                 val frameRYd = Math.abs(dY / delY).toInt()
                 frameTillReachX = interval * (step + 1) + frameRXd
